@@ -1,0 +1,808 @@
+<title>LE DAKAR Staff</title>
+<style>
+  :root{
+    --cream:#FBF1E3;
+    --cream-2:#F3E4CC;
+    --charcoal:#2A1C14;
+    --brown:#3E2417;
+    --brown-2:#2A160C;
+    --terracotta:#C1502E;
+    --terracotta-2:#A73F22;
+    --burnt:#E0651E;
+    --gold:#D89B2C;
+    --gold-2:#B87F1C;
+    --line:#DBC7A8;
+    --shadow:0 14px 32px -16px rgba(42,22,10,.28);
+    --surface:#FFFDF9;
+    --ok:#3E7B4F;
+    --ok-bg:#E4F1E6;
+    --warn:#B8791C;
+    --warn-bg:#FBF0DC;
+    --bad:#B84B3A;
+    --bad-bg:#FBE7E2;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --cream:#1B120B; --cream-2:#241809; --charcoal:#F1E3CD;
+      --brown:#120B06; --brown-2:#0B0603;
+      --terracotta:#E2703F; --terracotta-2:#F08B57; --burnt:#F0803A;
+      --gold:#E7B44C; --gold-2:#F2C868; --line:#3E2E1C;
+      --shadow:0 14px 34px -14px rgba(0,0,0,.55); --surface:#241A10;
+      --ok:#6FBE84; --ok-bg:#152A1B; --warn:#E3AA52; --warn-bg:#2C2110; --bad:#E38271; --bad-bg:#2E1712;
+    }
+  }
+  :root[data-theme="dark"]{
+    --cream:#1B120B; --cream-2:#241809; --charcoal:#F1E3CD;
+    --brown:#120B06; --brown-2:#0B0603;
+    --terracotta:#E2703F; --terracotta-2:#F08B57; --burnt:#F0803A;
+    --gold:#E7B44C; --gold-2:#F2C868; --line:#3E2E1C;
+    --shadow:0 14px 34px -14px rgba(0,0,0,.55); --surface:#241A10;
+    --ok:#6FBE84; --ok-bg:#152A1B; --warn:#E3AA52; --warn-bg:#2C2110; --bad:#E38271; --bad-bg:#2E1712;
+  }
+
+  *{box-sizing:border-box;}
+  html{font-size:16.5px;}
+  html,body{overflow-x:hidden; max-width:100%;}
+  body{
+    background:var(--cream); color:var(--charcoal);
+    font-family:"Work Sans",system-ui,-apple-system,sans-serif;
+    line-height:1.5; padding-inline:0;
+  }
+  @font-face{ font-family:"Work Sans"; src:local("Work Sans"); }
+  img,svg,canvas{max-width:100%;}
+  h1,h2,h3{ font-family:"Fraunces","Georgia",serif; font-weight:700; text-wrap:balance; margin:0; letter-spacing:-0.01em; }
+  a{color:inherit;}
+  button{font-family:inherit; cursor:pointer;}
+  input,select,textarea{font-family:inherit;}
+  .wrap{max-width:1080px; margin-inline:auto; padding-inline:20px;}
+  @media (min-width:640px){.wrap{padding-inline:32px;}}
+
+  /* ---------- lock screen ---------- */
+  .lock-screen{
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(120% 140% at 15% -10%, color-mix(in srgb, var(--terracotta) 26%, var(--brown)) 0%, var(--brown) 55%), var(--brown);
+    padding:24px;
+  }
+  .lock-card{
+    background:var(--surface); border-radius:22px; padding:36px 32px; max-width:360px; width:100%;
+    box-shadow:0 24px 60px -20px rgba(0,0,0,.45); text-align:center;
+  }
+  .lock-word{font-family:"Fraunces",serif; font-weight:800; font-size:24px;}
+  .lock-word em{color:var(--terracotta); font-style:italic;}
+  .lock-tag{font-size:12.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--gold-2); margin-top:4px;}
+  .lock-hint{font-size:13.5px; color:color-mix(in srgb, var(--charcoal) 60%, transparent); margin-top:14px;}
+  .pin-input{
+    width:100%; margin-top:20px; text-align:center; font-size:28px; letter-spacing:.4em;
+    padding:14px 10px 14px 20px; border-radius:14px; border:1.5px solid var(--line); background:var(--cream);
+    color:var(--charcoal); font-variant-numeric:tabular-nums;
+  }
+  .pin-input:focus{outline:2px solid var(--terracotta); outline-offset:1px;}
+  .lock-error{font-size:13px; color:var(--bad); margin-top:10px; min-height:18px;}
+  .lock-status{font-size:13px; color:color-mix(in srgb, var(--charcoal) 55%, transparent); margin-top:16px;}
+
+  /* ---------- app shell ---------- */
+  .topbar{
+    position:sticky; top:env(safe-area-inset-top,0px); z-index:40;
+    background:var(--brown); color:var(--cream); border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .topbar-inner{
+    max-width:1080px; margin-inline:auto; padding:14px 20px;
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  @media (min-width:640px){.topbar-inner{padding:16px 32px;}}
+  .topbar .wordmark{font-family:"Fraunces",serif; font-weight:800; font-size:19px; white-space:nowrap;}
+  .topbar .wordmark em{color:var(--gold); font-style:italic;}
+  .staff-pill{
+    background:rgba(255,255,255,.12); color:var(--gold); font-size:11px; font-weight:800;
+    letter-spacing:.1em; text-transform:uppercase; padding:5px 10px; border-radius:100px;
+  }
+  .staff-pill.admin{background:var(--gold); color:var(--brown-2);}
+  .topbar-spacer{flex:1;}
+  .topbar-user{font-size:13px; color:color-mix(in srgb, var(--cream) 78%, transparent); white-space:nowrap;}
+  .logout-btn{
+    border:1.5px solid rgba(255,255,255,.3); background:transparent; color:var(--cream);
+    font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:100px;
+  }
+  .logout-btn:hover{background:rgba(255,255,255,.08);}
+
+  .tabs{
+    display:flex; gap:4px; overflow-x:auto; padding:12px 20px 0;
+    max-width:1080px; margin-inline:auto; -ms-overflow-style:none; scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  @media (min-width:640px){.tabs{padding:14px 32px 0;}}
+  .tabs button{
+    border:none; background:transparent; color:var(--charcoal); opacity:.6;
+    font-size:14px; font-weight:700; padding:10px 16px; border-radius:100px 100px 0 0; white-space:nowrap;
+    border-bottom:2.5px solid transparent;
+  }
+  .tabs button[aria-current="true"]{opacity:1; border-bottom-color:var(--terracotta); color:var(--terracotta-2);}
+
+  section.tabpanel{padding-block:26px 60px;}
+
+  /* ---------- stat tiles ---------- */
+  .stat-row{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); margin-bottom:28px;}
+  .stat-tile{
+    background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:20px;
+    box-shadow:var(--shadow);
+  }
+  .stat-tile .label{font-size:11.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:color-mix(in srgb, var(--charcoal) 55%, transparent);}
+  .stat-tile .value{font-family:"Fraunces",serif; font-size:30px; font-weight:700; margin-top:6px; font-variant-numeric:tabular-nums;}
+  .stat-tile .sub{font-size:12px; margin-top:3px; color:color-mix(in srgb, var(--charcoal) 50%, transparent);}
+
+  /* ---------- generic panel ---------- */
+  .panel{background:var(--surface); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow);}
+  .panel-head{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 20px; border-bottom:1px solid var(--line); flex-wrap:wrap;}
+  .panel-head h2{font-size:18px;}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:7px; border:none; border-radius:100px;
+    padding:10px 18px; font-weight:700; font-size:13.5px; transition:transform .12s, filter .12s; text-decoration:none;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--terracotta); color:#fff; box-shadow:0 8px 18px -8px rgba(193,80,46,.55);}
+  .btn-primary:hover{filter:brightness(1.05);}
+  .btn-line{background:transparent; color:var(--charcoal); border:1.5px solid var(--line);}
+  .btn-sm{padding:7px 13px; font-size:12px;}
+  .btn-danger{background:var(--bad-bg); color:var(--bad);}
+  select.mini, input.mini{
+    font-size:12.5px; padding:6px 9px; border-radius:9px; border:1.5px solid var(--line); background:var(--cream); color:var(--charcoal);
+  }
+
+  /* ---------- order list ---------- */
+  .order-toolbar{display:flex; gap:10px; align-items:center; padding:14px 20px; flex-wrap:wrap; border-bottom:1px solid var(--line);}
+  .order-list{display:flex; flex-direction:column;}
+  .order-row{
+    display:flex; gap:14px; align-items:flex-start; padding:16px 20px; border-bottom:1px solid var(--line); flex-wrap:wrap;
+  }
+  .order-row:last-child{border-bottom:none;}
+  .order-main{flex:1 1 220px; min-width:0;}
+  .order-name{font-weight:700; font-size:14.5px;}
+  .order-meta{font-size:12px; color:color-mix(in srgb, var(--charcoal) 55%, transparent); margin-top:2px;}
+  .order-items{font-size:13px; margin-top:6px; color:color-mix(in srgb, var(--charcoal) 78%, transparent); max-width:52ch;}
+  .order-side{display:flex; flex-direction:column; gap:8px; align-items:flex-end; min-width:150px;}
+  .order-total{font-family:"Fraunces",serif; font-weight:700; font-size:17px; font-variant-numeric:tabular-nums;}
+  .badge{
+    display:inline-flex; align-items:center; font-size:11px; font-weight:800; letter-spacing:.03em;
+    padding:4px 10px; border-radius:100px; white-space:nowrap;
+  }
+  .badge-paid{background:var(--ok-bg); color:var(--ok);}
+  .badge-pending{background:var(--warn-bg); color:var(--warn);}
+  .badge-unpaid{background:var(--bad-bg); color:var(--bad);}
+  .order-actions{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end;}
+  .empty-note{padding:40px 20px; text-align:center; font-size:13.5px; color:color-mix(in srgb, var(--charcoal) 55%, transparent);}
+
+  /* ---------- menu & prices ---------- */
+  .menu-cat-block{padding:18px 20px; border-bottom:1px solid var(--line);}
+  .menu-cat-block:last-child{border-bottom:none;}
+  .menu-cat-title{font-size:13px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--terracotta); margin-bottom:10px;}
+  .menu-item-row{display:flex; align-items:center; gap:14px; padding:9px 0;}
+  .item-photo{
+    width:52px; height:52px; border-radius:12px; flex-shrink:0; overflow:hidden; position:relative;
+    background:linear-gradient(135deg,var(--terracotta),var(--burnt) 55%,var(--brown));
+    display:flex; align-items:center; justify-content:center; color:#fff; font-family:"Fraunces",serif; font-weight:700; font-size:16px;
+    border:none; padding:0; cursor:pointer;
+  }
+  .item-photo img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .item-photo .edit-dot{
+    position:absolute; right:-2px; bottom:-2px; width:18px; height:18px; border-radius:100px; background:var(--charcoal);
+    color:var(--cream); display:flex; align-items:center; justify-content:center; font-size:10px; border:2px solid var(--surface);
+  }
+  .item-info{flex:1; min-width:0;}
+  .item-name{font-size:14px; font-weight:600;}
+  .item-price-wrap{display:flex; align-items:center; gap:6px; flex-shrink:0;}
+  .item-price-wrap .cur{font-size:13px; color:color-mix(in srgb, var(--charcoal) 55%, transparent);}
+  .price-input{
+    width:74px; padding:7px 8px; border-radius:9px; border:1.5px solid var(--line); background:var(--cream);
+    color:var(--charcoal); font-size:14px; font-variant-numeric:tabular-nums; text-align:right;
+  }
+  .price-input:focus{outline:2px solid var(--terracotta); outline-offset:1px;}
+  .save-flag{font-size:11px; color:var(--ok); opacity:0; transition:opacity .3s; margin-left:2px;}
+  .save-flag.show{opacity:1;}
+
+  /* ---------- modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(20,12,6,.55); z-index:70;
+    display:flex; align-items:flex-end; justify-content:center; padding:0;
+  }
+  @media (min-width:640px){.modal-overlay{align-items:center; padding:20px;}}
+  .modal{
+    background:var(--surface); color:var(--charcoal); width:100%; max-width:480px;
+    border-radius:22px 22px 0 0; padding:24px; max-height:88vh; overflow-y:auto; box-shadow:var(--shadow);
+  }
+  @media (min-width:640px){.modal{border-radius:22px;}}
+  .modal h3{font-size:19px; margin-bottom:16px;}
+  .form-grid{display:grid; gap:14px; grid-template-columns:1fr 1fr;}
+  @media (max-width:480px){.form-grid{grid-template-columns:1fr;}}
+  .span-2{grid-column:1/-1;}
+  .field{display:flex; flex-direction:column; gap:6px; font-size:13px; font-weight:600;}
+  .field input,.field select,.field textarea{
+    font:inherit; padding:11px 13px; border-radius:11px; border:1.5px solid var(--line);
+    background:var(--cream); color:var(--charcoal); font-size:14.5px;
+  }
+  .modal-actions{display:flex; gap:10px; margin-top:18px;}
+  .close-x{position:absolute; top:14px; right:16px; border:none; background:none; font-size:18px; color:var(--charcoal); opacity:.6;}
+  .modal{position:relative;}
+
+  /* ---------- settings ---------- */
+  .settings-block{padding:22px 20px; max-width:420px;}
+  .settings-block .field{margin-bottom:14px;}
+  .access-note{
+    background:var(--cream-2); border-radius:14px; padding:14px 16px; font-size:12.5px;
+    color:color-mix(in srgb, var(--charcoal) 72%, transparent); margin-top:18px; line-height:1.55;
+  }
+
+  .toast{
+    position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom,0px)); transform:translate(-50%,10px);
+    background:var(--charcoal); color:var(--cream); padding:10px 18px; border-radius:100px;
+    font-size:13px; font-weight:600; z-index:80; opacity:0; transition:opacity .2s, transform .2s; pointer-events:none;
+  }
+  .toast.show{opacity:1; transform:translate(-50%,0);}
+  .gate-msg{max-width:420px; margin:80px auto; text-align:center; padding:0 20px; color:var(--charcoal);}
+  [hidden]{display:none!important;}
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..900&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<div id="gate-blocked" class="gate-msg" hidden>
+  <h2 style="font-size:22px;">Accès non disponible</h2>
+  <p style="margin-top:10px;font-size:14px;color:color-mix(in srgb, var(--charcoal) 65%, transparent);">
+    Cet espace est réservé au personnel de LE DAKAR. Demandez au propriétaire de vous inviter depuis le menu de partage de cet artefact, puis rouvrez ce lien connecté à votre compte Claude.
+  </p>
+</div>
+
+<div id="lock-screen" class="lock-screen" hidden>
+  <div class="lock-card">
+    <div class="lock-word">LE <em>DAKAR</em></div>
+    <p class="lock-tag">Espace Staff</p>
+    <p class="lock-hint">Entrez le code de l'équipe pour accéder au tableau de bord.</p>
+    <input id="pin-input" class="pin-input" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="····">
+    <p id="lock-error" class="lock-error"></p>
+    <button class="btn btn-primary" style="width:100%;margin-top:6px;" id="pin-submit">Déverrouiller</button>
+    <p id="lock-status" class="lock-status">Chargement…</p>
+  </div>
+</div>
+
+<div id="app-shell" hidden>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="wordmark">LE <em>DAKAR</em></div>
+      <span class="staff-pill" id="role-pill">Staff</span>
+      <div class="topbar-spacer"></div>
+      <span class="topbar-user" id="viewer-name"></span>
+      <button class="logout-btn" id="logout-btn">Verrouiller</button>
+    </div>
+  </div>
+
+  <nav class="tabs" id="tabs">
+    <button data-tab="dashboard" aria-current="true">Tableau de bord</button>
+    <button data-tab="orders">Commandes</button>
+    <button data-tab="menu">Menu &amp; Prix</button>
+    <button data-tab="settings">Réglages</button>
+  </nav>
+
+  <!-- ============ DASHBOARD ============ -->
+  <section class="wrap tabpanel" id="panel-dashboard">
+    <div class="stat-row">
+      <div class="stat-tile"><div class="label">Commandes aujourd'hui</div><div class="value" id="stat-today-count">0</div><div class="sub">toutes sources</div></div>
+      <div class="stat-tile"><div class="label">Recette encaissée</div><div class="value" id="stat-today-revenue">$0</div><div class="sub">payé, aujourd'hui</div></div>
+      <div class="stat-tile"><div class="label">En attente de paiement</div><div class="value" id="stat-pending">0</div><div class="sub">à encaisser</div></div>
+      <div class="stat-tile"><div class="label">Commandes actives</div><div class="value" id="stat-active">0</div><div class="sub">en préparation / prêtes</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>Dernières commandes</h2><button class="btn btn-line btn-sm" data-goto="orders">Voir tout</button></div>
+      <div class="order-list" id="recent-orders"></div>
+    </div>
+  </section>
+
+  <!-- ============ ORDERS ============ -->
+  <section class="wrap tabpanel" id="panel-orders" hidden>
+    <div class="panel">
+      <div class="order-toolbar">
+        <button class="btn btn-primary btn-sm" id="new-order-btn">+ Nouvelle commande</button>
+        <select class="mini" id="order-filter">
+          <option value="">Tous les statuts</option>
+          <option value="Nouvelle">Nouvelle</option>
+          <option value="En préparation">En préparation</option>
+          <option value="Prête">Prête</option>
+          <option value="Terminée">Terminée</option>
+          <option value="Annulée">Annulée</option>
+        </select>
+      </div>
+      <div class="order-list" id="all-orders"></div>
+    </div>
+  </section>
+
+  <!-- ============ MENU & PRICES ============ -->
+  <section class="wrap tabpanel" id="panel-menu" hidden>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Menu &amp; Prix</h2>
+        <span style="font-size:12px;color:color-mix(in srgb, var(--charcoal) 55%, transparent);">Prix en USD — modifié en direct pour l'équipe</span>
+      </div>
+      <div id="menu-editor"></div>
+    </div>
+    <p class="access-note" style="margin-top:16px;">
+      Ces prix et photos sont votre référence interne à jour. Le site public (celui que scannent vos clients) est un artefact séparé — dites-moi quand vous voulez que j'y reporte ces changements et je le republie pour vous.
+    </p>
+  </section>
+
+  <!-- ============ SETTINGS ============ -->
+  <section class="wrap tabpanel" id="panel-settings" hidden>
+    <div class="panel">
+      <div class="panel-head"><h2>Réglages</h2></div>
+      <div class="settings-block">
+        <div class="field">
+          <label for="new-pin">Code d'accès de l'équipe</label>
+          <input id="new-pin" inputmode="numeric" maxlength="6" placeholder="4 à 6 chiffres">
+        </div>
+        <button class="btn btn-primary btn-sm" id="save-pin-btn">Enregistrer le nouveau code</button>
+        <div class="access-note" id="admin-access-note">
+          Qui peut ouvrir cet espace est géré par le menu de partage de l'artefact (bouton « Share » sur claude.ai) — invitez chaque membre de l'équipe par e-mail depuis là. En tant qu'administrateur (accès « Can edit »), vous entrez directement sans code — le code PIN ci-dessus reste la porte pour le personnel invité en lecture, pratique sur un appareil partagé au comptoir.
+        </div>
+      </div>
+    </div>
+    <div id="settings-admin-only" class="empty-note" hidden>Seuls les membres avec accès « Can edit » peuvent changer le code d'accès.</div>
+  </section>
+</div>
+
+<!-- ============ ORDER MODAL ============ -->
+<div class="modal-overlay" id="order-modal-overlay" hidden>
+  <form class="modal" id="order-form">
+    <button type="button" class="close-x" id="order-modal-close" aria-label="Fermer">✕</button>
+    <h3 id="order-modal-title">Nouvelle commande</h3>
+    <input type="hidden" id="order-id">
+    <div class="form-grid">
+      <label class="field span-2">Client<input id="order-customer" required placeholder="Nom du client"></label>
+      <label class="field">Téléphone<input id="order-phone" type="tel" placeholder="(optionnel)"></label>
+      <label class="field">Total ($)<input id="order-total" type="number" min="0" step="0.01" required></label>
+      <label class="field span-2">Articles<textarea id="order-items" rows="2" placeholder="ex. 2x Thiebou Djeun, 1x Bissap"></textarea></label>
+      <label class="field">Source
+        <select id="order-source">
+          <option>Téléphone</option><option>Comptoir</option><option>Uber Eats</option>
+          <option>DoorDash</option><option>Grubhub</option><option>Traiteur</option><option>Autre</option>
+        </select>
+      </label>
+      <label class="field">Statut paiement
+        <select id="order-payment">
+          <option value="Payé">Payé</option><option value="En attente">En attente</option><option value="Non payé">Non payé</option>
+        </select>
+      </label>
+      <label class="field span-2">Statut commande
+        <select id="order-status">
+          <option>Nouvelle</option><option>En préparation</option><option>Prête</option><option>Terminée</option><option>Annulée</option>
+        </select>
+      </label>
+      <label class="field span-2">Notes<textarea id="order-notes" rows="2" placeholder="(optionnel)"></textarea></label>
+    </div>
+    <div class="modal-actions">
+      <button type="submit" class="btn btn-primary" style="flex:1;">Enregistrer</button>
+      <button type="button" class="btn btn-line" id="order-delete-btn" hidden>Supprimer</button>
+    </div>
+  </form>
+</div>
+
+<input type="file" id="photo-file-input" accept="image/*" hidden>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  // ---------- reference menu (mirrors the public site's real, verified menu) ----------
+  var REF_MENU = [
+    {cat:"Breakfast", items:[
+      {n:"Chawarma Beef", p:12},{n:"Chawarma Chicken", p:12},
+      {n:"Tacos Chicken", p:13},{n:"Tacos Beef", p:13}
+    ]},
+    {cat:"Lunch", items:[
+      {n:"Thiebou Djeun", p:20},{n:"Thiebou Yapp", p:20},{n:"Suppu Kandja", p:20},
+      {n:"Thiou Poisson", p:20},{n:"Lamb Maffe", p:20},{n:"Thiebou Kethiokhe", p:20},
+      {n:"Thiebou Gimar", p:20},{n:"Sulukhu", p:20},{n:"Chicken Yassa", p:20},
+      {n:"Domada Yapp", p:20},{n:"Mbakhale", p:20},{n:"Dakhine", p:20},{n:"Cebon", p:25}
+    ]},
+    {cat:"Fast Food", items:[
+      {n:"Shawarma", p:12},{n:"Tacos", p:13}
+    ]},
+    {cat:"Desserts", items:[
+      {n:"Ngualakh", p:5},{n:"Thiakry", p:5}
+    ]},
+    {cat:"Beverages", items:[
+      {n:"Bouyé (Baobab)", p:5},{n:"Bissap Juice", p:5},{n:"Fruit Cocktail", p:5},
+      {n:"Tamarind Juice", p:5},{n:"Ginger Juice", p:5},{n:"Soda", p:2},{n:"Spring Water", p:1}
+    ]}
+  ];
+
+  function slug(s){
+    return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
+  }
+  function money(n){
+    var v = typeof n === "number" && !isNaN(n) ? n : 0;
+    return "$" + v.toLocaleString("en-US",{minimumFractionDigits: v % 1 ? 2 : 0, maximumFractionDigits:2});
+  }
+  function fmtTime(iso){
+    if(!iso) return "";
+    try{
+      var d = new Date(iso);
+      return d.toLocaleString("fr-FR",{day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit"});
+    }catch(e){ return ""; }
+  }
+  function isToday(iso){
+    if(!iso) return false;
+    var d = new Date(iso), now = new Date();
+    return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth() && d.getDate()===now.getDate();
+  }
+  function toast(msg){
+    var t = document.getElementById("toast");
+    t.textContent = msg; t.classList.add("show");
+    clearTimeout(toast._h);
+    toast._h = setTimeout(function(){ t.classList.remove("show"); }, 2200);
+  }
+
+  var db = null, assets = null, userCap = null;
+  var canWrite = false, canEditLevel = false;
+  var orders = [];
+  var menuOverrides = {};
+  var settingsPin = null;
+  var unlocked = false;
+  var pendingPhotoKey = null;
+  var savedFlags = {};
+
+  function showEl(id){ document.getElementById(id).hidden = false; }
+  function hideEl(id){ document.getElementById(id).hidden = true; }
+
+  async function init(){
+    try{
+      db = (window.claude && typeof window.claude.use === "function") ? await window.claude.use("db") : null;
+    }catch(e){ db = null; }
+    try{
+      assets = (window.claude && typeof window.claude.use === "function") ? await window.claude.use("assets") : null;
+    }catch(e){ assets = null; }
+    try{
+      userCap = (window.claude && typeof window.claude.use === "function") ? await window.claude.use("user") : null;
+    }catch(e){ userCap = null; }
+
+    if(!db){
+      hideEl("lock-screen");
+      showEl("gate-blocked");
+      return;
+    }
+
+    if(userCap){
+      try{
+        canWrite = (await userCap.can("data.write")) !== false;
+      }catch(e){ canWrite = true; }
+      try{
+        canEditLevel = typeof userCap.canEdit === "function" ? await userCap.canEdit() : false;
+      }catch(e){ canEditLevel = false; }
+      try{
+        var me = await userCap.me();
+        var nameEl = document.getElementById("viewer-name");
+        if(nameEl) nameEl.textContent = (me && me.name) ? me.name : "";
+      }catch(e){}
+    } else {
+      canWrite = true;
+    }
+
+    // ---- role pill reflects who is actually signed in ----
+    var pillEl = document.getElementById("role-pill");
+    if(pillEl){
+      if(canEditLevel){ pillEl.textContent = "Admin"; pillEl.classList.add("admin"); }
+      else { pillEl.textContent = "Staff"; pillEl.classList.remove("admin"); }
+    }
+
+    // ---- settings/staff (PIN) ----
+    try{
+      db.doc("settings/staff").onSnapshot(function(snap){
+        if(snap.exists){
+          var data = snap.data();
+          settingsPin = (data && data.pin) ? String(data.pin) : "1234";
+        } else {
+          settingsPin = "1234";
+          if(canWrite){
+            db.doc("settings/staff").set({pin:"1234", updatedAt:new Date().toISOString()}).catch(function(){});
+          }
+        }
+      }, function(err){
+        settingsPin = "1234";
+      });
+    }catch(e){ settingsPin = "1234"; }
+
+    // ---- orders ----
+    try{
+      db.collection("orders").orderBy("createdAt","desc").limit(200).onSnapshot(function(qs){
+        orders = qs.docs.map(function(d){ var o = d.data(); o._id = d.id; return o; });
+        renderDashboard();
+        renderOrders();
+      }, function(err){
+        toast("Impossible de charger les commandes.");
+      });
+    }catch(e){}
+
+    // ---- menu overrides ----
+    try{
+      db.collection("menu_overrides").onSnapshot(function(qs){
+        var next = {};
+        qs.docs.forEach(function(d){ next[d.id] = d.data(); });
+        menuOverrides = next;
+        renderMenuEditor();
+      }, function(err){});
+    }catch(e){}
+
+    if(!canEditLevel){
+      document.getElementById("new-pin").disabled = true;
+      document.getElementById("save-pin-btn").disabled = true;
+      showEl("settings-admin-only");
+    }
+
+    // ---- direct access for the admin: an authenticated "Can edit" account
+    // (verified by Claude's own artifact-sharing permissions, not by the shared
+    // PIN) skips the lock screen entirely and goes straight to the dashboard.
+    // Anyone with view/comment-only access still needs the team PIN below.
+    if(canEditLevel){
+      unlocked = true;
+      hideEl("lock-screen");
+      showEl("app-shell");
+    } else {
+      showEl("lock-screen");
+      document.getElementById("lock-status").textContent = "";
+    }
+  }
+
+  // ---------- lock screen ----------
+  var pinInput = document.getElementById("pin-input");
+  document.getElementById("pin-submit").addEventListener("click", tryUnlock);
+  pinInput.addEventListener("keydown", function(e){ if(e.key === "Enter") tryUnlock(); });
+  function tryUnlock(){
+    var val = pinInput.value.trim();
+    if(!settingsPin){ document.getElementById("lock-error").textContent = "Chargement en cours, réessayez dans un instant."; return; }
+    if(val === settingsPin){
+      unlocked = true;
+      hideEl("lock-screen");
+      showEl("app-shell");
+      document.getElementById("lock-error").textContent = "";
+    } else {
+      document.getElementById("lock-error").textContent = "Code incorrect.";
+      pinInput.value = "";
+      pinInput.focus();
+    }
+  }
+  document.getElementById("logout-btn").addEventListener("click", function(){
+    unlocked = false;
+    hideEl("app-shell");
+    showEl("lock-screen");
+    pinInput.value = "";
+    pinInput.focus();
+  });
+
+  // ---------- tabs ----------
+  document.getElementById("tabs").addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-tab]");
+    if(!btn) return;
+    goToTab(btn.dataset.tab);
+  });
+  document.addEventListener("click", function(e){
+    var g = e.target.closest("[data-goto]");
+    if(g) goToTab(g.dataset.goto);
+  });
+  function goToTab(tab){
+    document.querySelectorAll(".tabs button").forEach(function(b){
+      b.setAttribute("aria-current", b.dataset.tab === tab ? "true" : "false");
+    });
+    ["dashboard","orders","menu","settings"].forEach(function(t){
+      document.getElementById("panel-" + t).hidden = (t !== tab);
+    });
+  }
+
+  // ---------- dashboard ----------
+  function renderDashboard(){
+    var todays = orders.filter(function(o){ return isToday(o.createdAt); });
+    var revenue = todays.filter(function(o){ return o.paymentStatus === "Payé"; })
+      .reduce(function(s,o){ return s + (Number(o.total)||0); }, 0);
+    var pending = orders.filter(function(o){ return o.paymentStatus !== "Payé" && o.orderStatus !== "Annulée"; }).length;
+    var active = orders.filter(function(o){ return o.orderStatus === "En préparation" || o.orderStatus === "Prête" || o.orderStatus === "Nouvelle"; }).length;
+
+    document.getElementById("stat-today-count").textContent = todays.length;
+    document.getElementById("stat-today-revenue").textContent = money(revenue);
+    document.getElementById("stat-pending").textContent = pending;
+    document.getElementById("stat-active").textContent = active;
+
+    var recent = orders.slice(0, 6);
+    document.getElementById("recent-orders").innerHTML = recent.length ? recent.map(orderRowHtml).join("") :
+      '<div class="empty-note">Aucune commande pour le moment. Cliquez « + Nouvelle commande » dans l\'onglet Commandes.</div>';
+  }
+
+  // ---------- orders tab ----------
+  function paymentBadge(status){
+    var cls = status === "Payé" ? "badge-paid" : status === "Non payé" ? "badge-unpaid" : "badge-pending";
+    return '<span class="badge ' + cls + '">' + escapeHtml(status || "En attente") + '</span>';
+  }
+  function orderRowHtml(o){
+    return '' +
+      '<div class="order-row" data-id="' + escapeAttr(o._id) + '">' +
+        '<div class="order-main">' +
+          '<div class="order-name">' + escapeHtml(o.customerName || "Client") + '</div>' +
+          '<div class="order-meta">' + escapeHtml(o.source || "") + ' · ' + fmtTime(o.createdAt) + (o.orderStatus ? ' · ' + escapeHtml(o.orderStatus) : '') + '</div>' +
+          (o.itemsText ? '<div class="order-items">' + escapeHtml(o.itemsText) + '</div>' : '') +
+        '</div>' +
+        '<div class="order-side">' +
+          '<div class="order-total">' + money(Number(o.total)||0) + '</div>' +
+          paymentBadge(o.paymentStatus) +
+          '<div class="order-actions">' +
+            '<button class="btn btn-line btn-sm" data-edit="' + escapeAttr(o._id) + '">Modifier</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  }
+  function renderOrders(){
+    var filter = document.getElementById("order-filter").value;
+    var list = filter ? orders.filter(function(o){ return o.orderStatus === filter; }) : orders;
+    document.getElementById("all-orders").innerHTML = list.length ? list.map(orderRowHtml).join("") :
+      '<div class="empty-note">Aucune commande ne correspond à ce filtre.</div>';
+  }
+  document.getElementById("order-filter").addEventListener("change", renderOrders);
+  document.body.addEventListener("click", function(e){
+    var editBtn = e.target.closest("[data-edit]");
+    if(editBtn){ openOrderModal(editBtn.dataset.edit); }
+  });
+
+  // ---------- order modal ----------
+  var orderOverlay = document.getElementById("order-modal-overlay");
+  document.getElementById("new-order-btn").addEventListener("click", function(){ openOrderModal(null); });
+  document.getElementById("order-modal-close").addEventListener("click", closeOrderModal);
+  orderOverlay.addEventListener("click", function(e){ if(e.target === orderOverlay) closeOrderModal(); });
+  function closeOrderModal(){ orderOverlay.hidden = true; }
+  function openOrderModal(id){
+    var o = id ? orders.find(function(x){ return x._id === id; }) : null;
+    document.getElementById("order-modal-title").textContent = o ? "Modifier la commande" : "Nouvelle commande";
+    document.getElementById("order-id").value = o ? o._id : "";
+    document.getElementById("order-customer").value = o ? (o.customerName||"") : "";
+    document.getElementById("order-phone").value = o ? (o.phone||"") : "";
+    document.getElementById("order-total").value = o ? (o.total||"") : "";
+    document.getElementById("order-items").value = o ? (o.itemsText||"") : "";
+    document.getElementById("order-source").value = o ? (o.source||"Téléphone") : "Téléphone";
+    document.getElementById("order-payment").value = o ? (o.paymentStatus||"En attente") : "En attente";
+    document.getElementById("order-status").value = o ? (o.orderStatus||"Nouvelle") : "Nouvelle";
+    document.getElementById("order-notes").value = o ? (o.notes||"") : "";
+    document.getElementById("order-delete-btn").hidden = !o;
+    orderOverlay.hidden = false;
+    document.getElementById("order-customer").focus();
+  }
+  document.getElementById("order-form").addEventListener("submit", async function(e){
+    e.preventDefault();
+    if(!db){ toast("Non disponible hors ligne."); return; }
+    var id = document.getElementById("order-id").value;
+    var body = {
+      customerName: document.getElementById("order-customer").value.trim(),
+      phone: document.getElementById("order-phone").value.trim(),
+      total: parseFloat(document.getElementById("order-total").value) || 0,
+      itemsText: document.getElementById("order-items").value.trim(),
+      source: document.getElementById("order-source").value,
+      paymentStatus: document.getElementById("order-payment").value,
+      orderStatus: document.getElementById("order-status").value,
+      notes: document.getElementById("order-notes").value.trim(),
+      updatedAt: new Date().toISOString()
+    };
+    try{
+      if(id){
+        await db.collection("orders").doc(id).update(body);
+        toast("Commande mise à jour.");
+      } else {
+        body.createdAt = new Date().toISOString();
+        await db.collection("orders").add(body);
+        toast("Commande ajoutée.");
+      }
+      closeOrderModal();
+    }catch(err){
+      toast("Échec de l'enregistrement — vérifiez vos droits d'accès.");
+    }
+  });
+  document.getElementById("order-delete-btn").addEventListener("click", async function(){
+    var id = document.getElementById("order-id").value;
+    if(!id || !db) return;
+    if(!confirm("Supprimer cette commande ?")) return;
+    try{
+      await db.collection("orders").doc(id).delete();
+      toast("Commande supprimée.");
+      closeOrderModal();
+    }catch(err){
+      toast("Échec de la suppression.");
+    }
+  });
+
+  // ---------- menu & prices ----------
+  function renderMenuEditor(){
+    var html = REF_MENU.map(function(cat){
+      var rows = cat.items.map(function(it){
+        var key = slug(it.n);
+        var ov = menuOverrides[key] || {};
+        var price = (typeof ov.price === "number") ? ov.price : it.p;
+        var photoUrl = ov.photoUrl || "";
+        var initial = it.n.slice(0,1);
+        return '' +
+          '<div class="menu-item-row" data-key="' + escapeAttr(key) + '">' +
+            '<button type="button" class="item-photo" data-photo-key="' + escapeAttr(key) + '" title="Changer la photo">' +
+              (photoUrl ? '<img src="' + escapeAttr(photoUrl) + '" alt="">' : escapeHtml(initial)) +
+              '<span class="edit-dot">✎</span>' +
+            '</button>' +
+            '<div class="item-info"><div class="item-name">' + escapeHtml(it.n) + '</div></div>' +
+            '<div class="item-price-wrap">' +
+              '<span class="cur">$</span>' +
+              '<input class="price-input" type="number" min="0" step="0.5" value="' + price + '" data-price-key="' + escapeAttr(key) + '">' +
+              '<span class="save-flag" id="flag-' + escapeAttr(key) + '">✓</span>' +
+            '</div>' +
+          '</div>';
+      }).join("");
+      return '<div class="menu-cat-block"><div class="menu-cat-title">' + escapeHtml(cat.cat) + '</div>' + rows + '</div>';
+    }).join("");
+    document.getElementById("menu-editor").innerHTML = html;
+  }
+
+  var priceDebounce = {};
+  document.getElementById("menu-editor").addEventListener("change", function(e){
+    var inp = e.target.closest("[data-price-key]");
+    if(!inp || !db) return;
+    var key = inp.dataset.priceKey;
+    var val = parseFloat(inp.value);
+    if(isNaN(val) || val < 0) return;
+    clearTimeout(priceDebounce[key]);
+    priceDebounce[key] = setTimeout(function(){
+      db.collection("menu_overrides").doc(key).set(Object.assign({}, menuOverrides[key]||{}, {
+        price: val, updatedAt: new Date().toISOString()
+      })).then(function(){
+        var flag = document.getElementById("flag-" + key);
+        if(flag){ flag.classList.add("show"); setTimeout(function(){ flag.classList.remove("show"); }, 1400); }
+      }).catch(function(){ toast("Échec de l'enregistrement du prix."); });
+    }, 500);
+  });
+
+  document.getElementById("menu-editor").addEventListener("click", function(e){
+    var btn = e.target.closest("[data-photo-key]");
+    if(!btn) return;
+    if(!assets){ toast("Photos non disponibles pour ce compte."); return; }
+    pendingPhotoKey = btn.dataset.photoKey;
+    document.getElementById("photo-file-input").click();
+  });
+  document.getElementById("photo-file-input").addEventListener("change", async function(e){
+    var file = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if(!file || !pendingPhotoKey || !assets || !db) return;
+    var key = pendingPhotoKey;
+    try{
+      toast("Envoi de la photo…");
+      var res = await assets.upload(file);
+      await db.collection("menu_overrides").doc(key).set(Object.assign({}, menuOverrides[key]||{}, {
+        photoAssetId: res.id, photoUrl: res.url, updatedAt: new Date().toISOString()
+      }));
+      toast("Photo mise à jour.");
+    }catch(err){
+      toast("Échec de l'envoi de la photo.");
+    }
+  });
+
+  // ---------- settings ----------
+  document.getElementById("save-pin-btn").addEventListener("click", async function(){
+    var val = document.getElementById("new-pin").value.trim();
+    if(!/^[0-9]{4,6}$/.test(val)){ toast("Le code doit contenir 4 à 6 chiffres."); return; }
+    if(!db){ toast("Non disponible hors ligne."); return; }
+    try{
+      await db.doc("settings/staff").set({pin: val, updatedAt: new Date().toISOString()});
+      toast("Nouveau code enregistré.");
+      document.getElementById("new-pin").value = "";
+    }catch(err){
+      toast("Échec — droits d'accès insuffisants.");
+    }
+  });
+
+  // ---------- helpers ----------
+  function escapeHtml(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+  function escapeAttr(s){ return escapeHtml(s); }
+
+  init();
+})();
+</script>
